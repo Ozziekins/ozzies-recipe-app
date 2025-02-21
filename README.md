@@ -3,8 +3,7 @@
 [![Vitest](https://img.shields.io/badge/tested%20with-vitest-purple?style=plastic&logo=vite)](https://jestjs.io/)
 [![Prettier](https://img.shields.io/badge/formatted%20with-prettier-yellow?style=plastic&logo=prettier)](https://www.npmjs.com/package/prettier)
 [![CI](https://github.com/Ozziekins/ozzies-recipe-app/actions/workflows/ci.yml/badge.svg)](https://github.com/Ozziekins/ozzies-recipe-app/actions)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/fbf643a7-0388-43fd-8e21-6e377a40a724/deploy-status)](https://app.netlify.com/sites/ozzies-recipe-app/deploys)
-
+[![Netlify Status](https://api.netlify.com/api/v1/badges/72770961-24bd-42df-9695-4ce32b17b23d/deploy-status)](https://app.netlify.com/sites/ozzies-recipe-app/deploys)
 <br />
 
 <!-- PROJECT LOGO -->

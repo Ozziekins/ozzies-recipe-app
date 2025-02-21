@@ -25,7 +25,7 @@ export const requireAuth = (
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded as Record<string, unknown>;
     next();
-  } catch (_error) {
+  } catch {
     return res.status(401).json({ error: 'Unauthorized, invalid token' });
   }
 };

@@ -1,0 +1,16 @@
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
+
+[build]
+  command = "vite build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions/"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/netlify/functions/app/api/:splat"
+  status = 200

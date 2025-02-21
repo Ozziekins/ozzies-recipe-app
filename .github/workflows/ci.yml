@@ -28,11 +28,11 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      # - name: Test
-      #   run: npm run test
+      - name: Test
+        run: npm run test
 
       - name: Build
         run: npm run build
 
       # - name: Deploy
-      #   run: some-deploy-command
+      #   run: deploy-command

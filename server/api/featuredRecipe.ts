@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { AxiosError } from 'axios';
 
 dotenv.config();
 
@@ -36,10 +37,11 @@ router.get('/featured', async (req, res) => {
     };
 
     res.json({ recipe: featuredRecipe });
-  } catch (error: any) {
-    console.error('Error fetching featured recipe:', error.message);
-    console.error('Error details:', error.response?.data || error);
-    res.status(500).json({ error: 'Failed to fetch featured recipe' });
+  } catch (error: unknown) {
+    const err = error as AxiosError;
+    console.error('Error fetching featured recipe:', err.message);
+    console.error('Error details:', err.response?.data || err);
+    res.status(500).json({ err: 'Failed to fetch featured recipe' });
   }
 });
 

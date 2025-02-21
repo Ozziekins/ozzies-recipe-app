@@ -15,7 +15,7 @@ const Signup: React.FC = () => {
     mutationFn: (newUser: { name: string; email: string; password: string }) =>
       axios.post('/api/auth/signup', newUser),
     onSuccess: (response) => {
-      // After signup, redirect to login
+      console.log("Yaay!", response)
       navigate('/login');
     },
   });

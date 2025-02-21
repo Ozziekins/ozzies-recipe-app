@@ -2,12 +2,12 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { AxiosError } from 'axios';
 
 dotenv.config();
 
 const router = express.Router();
 
-// Dummy user store 
 interface User {
   id: number;
   name: string;
@@ -16,7 +16,7 @@ interface User {
 }
 const users: User[] = [];
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/signup', async (req, res) => {
   try {
@@ -38,9 +38,10 @@ router.post('/signup', async (req, res) => {
     users.push(newUser);
 
     res.json({ user: { id: newUser.id, name: newUser.name, email: newUser.email } });
-  } catch (error: any) {
-    console.error('Signup error:', error.message);
-    res.status(500).json({ error: 'Signup failed' });
+  } catch (error: unknown) {
+    const err = error as AxiosError;
+    console.error('Signup error:', err.message);
+    res.status(500).json({ err: 'Signup failed' });
   }
 });
 
@@ -57,7 +58,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Sign a JWT that includes the user's id, name, and email
     const token = jwt.sign(
       { id: user.id, name: user.name, email: user.email },
       JWT_SECRET,
@@ -65,9 +65,10 @@ router.post('/login', async (req, res) => {
     );
 
     res.json({ user: { id: user.id, name: user.name, email: user.email, token } });
-  } catch (error: any) {
-    console.error('Login error:', error.message);
-    res.status(500).json({ error: 'Login failed' });
+  } catch (error: unknown) {
+    const err = error as AxiosError;
+    console.error('Login error:', err.message);
+    res.status(500).json({ err: 'Login failed' });
   }
 });
 

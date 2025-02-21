@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
   Box,
   Container,
   Typography,
-  Card,
   CardMedia,
-  CardContent,
-  CardActions,
   Button,
   Chip,
   Divider,
@@ -32,11 +29,9 @@ interface Nutrient {
 interface Recipe {
   id: string;
   title: string;
-  label: string;
   image: string;
   summary: string;
   url?: string;
-  source?: string;
   shareAs?: string;
   yield?: number;
   ingredientLines?: string[];
@@ -45,7 +40,6 @@ interface Recipe {
   cautions?: string[];
   calories?: number;
   totalTime?: number;
-  totalNutrients?: Record<string, Nutrient>;
 }
 
 const RecipeDetails: React.FC = () => {
@@ -64,8 +58,9 @@ const RecipeDetails: React.FC = () => {
         }
         const { data } = await axios.get(`/api/recipes/${encodeURIComponent(encodedUri)}`);
         setRecipe(data.recipe);
-      } catch (err: any) {
-        console.error('Error loading recipe:', err.message);
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error('Error loading recipe:', error.message);
         setError('Error loading recipe');
       } finally {
         setLoading(false);
@@ -97,7 +92,6 @@ const RecipeDetails: React.FC = () => {
 
   const {
     title,
-    label,
     image,
     summary,
     ingredientLines,
@@ -106,10 +100,8 @@ const RecipeDetails: React.FC = () => {
     healthLabels,
     cautions,
     calories,
-    totalNutrients,
     yield: servings,
     url,
-    source
   } = recipe;
 
   const isFavorited = () => {

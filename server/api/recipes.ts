@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { AxiosError } from 'axios';
 
 dotenv.config();
 
@@ -9,7 +10,22 @@ const router = express.Router();
 const EDAMAM_APP_ID = process.env.EDAMAM_APP_ID;
 const EDAMAM_APP_KEY = process.env.EDAMAM_APP_KEY;
 
-// Route for searching recipes (GET /api/recipes?search=...)
+interface EdamamRecipe {
+  uri: string;
+  label: string;
+  image: string;
+  source: string;
+  ingredientLines?: string[];
+  totalTime?: number;
+  dietLabels?: string[];
+  healthLabels?: string[];
+  url?: string;
+}
+
+interface EdamamHit {
+  recipe: EdamamRecipe;
+}
+
 router.get('/', async (req, res) => {
   try {
     let searchQuery = req.query.search as string;
@@ -29,8 +45,8 @@ router.get('/', async (req, res) => {
       },
     });
 
-    const recipes = response.data.hits.map((hit: any) => {
-      const recipeData = hit.recipe;
+    const recipes = response.data.hits.map((hit: unknown) => {
+      const recipeData = (hit as EdamamHit).recipe;
       return {
         id: recipeData.uri, // full recipe URI
         title: recipeData.label,
@@ -40,13 +56,13 @@ router.get('/', async (req, res) => {
     });
 
     res.json({ recipes });
-  } catch (error: any) {
-    console.error('Error fetching recipes:', error.message);
-    res.status(500).json({ error: 'Failed to fetch recipes' });
+  } catch (error: unknown) {
+    const err = error as AxiosError;
+    console.error('Error fetching recipes:', err.message);
+    res.status(500).json({ err: 'Failed to fetch recipes' });
   }
 });
 
-// Featured recipe route (GET /api/recipes/featured)
 router.get('/featured', async (req, res) => {
   try {
     const defaultQuery = 'pasta';
@@ -74,9 +90,10 @@ router.get('/featured', async (req, res) => {
     };
 
     res.json({ recipe: featuredRecipe });
-  } catch (error: any) {
-    console.error('Error fetching featured recipe:', error.message);
-    res.status(500).json({ error: 'Failed to fetch featured recipe' });
+  } catch (error: unknown) {
+    const err = error as AxiosError;
+    console.error('Error fetching featured recipe:', err.message);
+    res.status(500).json({ err: 'Failed to fetch featured recipe' });
   }
 });
 
@@ -113,9 +130,10 @@ router.get('/:encodedUri', async (req, res) => {
       url: recipeData.url, // or recipeData.shareAs
     };
     res.json({ recipe });
-  } catch (error: any) {
-    console.error('Error fetching recipe details:', error.message);
-    res.status(500).json({ error: 'Failed to fetch recipe details' });
+  } catch (error: unknown) {
+    const err = error as AxiosError;
+    console.error('Error fetching recipe details:', err.message);
+    res.status(500).json({ err: 'Failed to fetch recipe details' });
   }
 });
 

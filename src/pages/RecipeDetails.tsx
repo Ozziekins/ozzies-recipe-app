@@ -20,12 +20,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Layout from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 
-interface Nutrient {
-  label: string;
-  quantity: number;
-  unit: string;
-}
-
 interface Recipe {
   id: string;
   title: string;

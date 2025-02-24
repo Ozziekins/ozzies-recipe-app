@@ -14,6 +14,9 @@ app.use('/api/user', userRouter);
 app.use('/api/recipes', recipesRouter);
 
 if (import.meta.url === new URL(process.argv[1], 'file://').href) {
+  console.log('EDAMAM_APP_ID:', process.env.EDAMAM_APP_ID);
+  console.log('EDAMAM_APP_KEY:', process.env.EDAMAM_APP_KEY);
+
   const PORT = process.env.PORT || 3003;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
